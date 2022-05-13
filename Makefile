@@ -11,3 +11,14 @@ parse: main.cpp parser.cpp scanner.cpp
 
 clean:
 	rm -f parse scanner.cpp parser.cpp parser.hpp
+
+new:
+	rm -f parse scanner.cpp parser.cpp parser.hpp
+	flex -o scanner.cpp scanner.l
+	bison -d -o parser.cpp parser.y
+	g++ -g main.cpp parser.cpp scanner.cpp tree.hpp -o parse
+	./parse < testing_code/p0.py >test.gv
+	dot -Tpng -otree.png test.gv
+run:
+	./parse < testing_code/p2.py >test.gv
+	dot -Tpng -otree.png test.gv

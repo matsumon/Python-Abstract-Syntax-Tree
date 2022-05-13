@@ -47,7 +47,7 @@
    * This macro invokes the push parser for a new token.
    */
   #define PUSH_TOKEN(category, lexeme) do {                      \
-    yylval = lexeme ? new std::string(lexeme) : NULL;            \
+    yylval.str = lexeme ? new std::string(lexeme) : NULL;            \
     loc.first_line = loc.last_line = yylineno;                   \
     int status = yypush_parse(pstate, category, &yylval, &loc);  \
     if (status != YYPUSH_MORE) {                                 \
