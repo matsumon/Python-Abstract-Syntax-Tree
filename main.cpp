@@ -49,8 +49,8 @@ void print_tree(Tree *node,std::string parent){
     for (std::vector<Tree *>::iterator it = node->child.begin() ; it != node->child.end(); it++){
       print_tree(*it,current_node);
     }
-    print_tree(node->left_node,current_node);
-    print_tree(node->right_node,current_node);
+    // print_tree(node->left_node,current_node);
+    // print_tree(node->right_node,current_node);
   // else{
   //     std::ostringstream stm ;
   //     stm << a ;

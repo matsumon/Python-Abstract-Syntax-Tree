@@ -124,29 +124,23 @@ statement
  */
 primary_expression
   : IDENTIFIER {
-      // $$ = $1;
-        Tree * temp =new Tree("IDENTIFIER", *$1, NULL, NULL);
+        Tree * temp =new Tree("IDENTIFIER", *$1);
         $$ = temp;
       }
   | FLOAT {
-      // $$ = $1;
-        Tree * temp =new Tree("FLOAT", *$1, NULL, NULL);
+        Tree * temp =new Tree("FLOAT", *$1);
         $$ = temp;
       }
   | INTEGER {
-      // $$ = $1;
-        Tree * temp =new Tree("INTEGER", *$1, NULL, NULL);
+        Tree * temp =new Tree("INTEGER", *$1);
         $$ = temp;
       }
   | BOOLEAN {
-      // $$ = translate_boolean_str($1); delete $1;
-        Tree * temp =new Tree("BOOLEAN", *translate_boolean_str($1), NULL, NULL);
+        Tree * temp =new Tree("BOOLEAN", *translate_boolean_str($1));
         $$ = temp;
       }
   | LPAREN expression RPAREN {
-      // $$ = new std::string("(" + *$2 + ")"); delete $2;
-        // Tree * temp =new Tree("PARENTHESIZED_EXPRESSIONS", "(" + $2->left_node->value + ")", NULL, NULL);
-        Tree * temp =new Tree("PARENTHESES", "", $2, NULL);
+        Tree * temp =new Tree("PARENTHESES", "");
         $$ = temp;
       }
   ;
@@ -156,8 +150,9 @@ primary_expression
  */
 negated_expression
   : NOT primary_expression {
-        //$$ = new std::string("!" + *$2); delete $2;
-        Tree * temp =new Tree("NOT", NULL, $2, NULL);
+        // Tree * temp =new Tree("NOT", NULL, $2, NULL);
+        Tree * temp =new Tree("NOT", NULL);
+        temp->child.push_back($2);
         $$ = temp;
       }
   ;
@@ -172,52 +167,80 @@ expression
   | negated_expression { $$ = $1; }
   | expression PLUS expression {
       //$$ = new std::string(*$1 + " + " + *$3); delete $1; delete $3;
-      Tree * temp =new Tree("PLUS","", $1, $3);
+      Tree * temp =new Tree("PLUS","");
+      temp->child.push_back($1);
+      temp->child.push_back($3);
       $$ = temp;
      }
   | expression MINUS expression {
       //$$ = new std::string(*$1 + " - " + *$3); delete $1; delete $3;
-      Tree * temp =new Tree("MINUS", "", $1, $3);;
+      // Tree * temp =new Tree("MINUS", "", $1, $3);
+      Tree * temp =new Tree("MINUS", "");
+      temp->child.push_back($1);
+      temp->child.push_back($3);
       $$ = temp;
      }
   | expression TIMES expression {
       //$$ = new std::string(*$1 + " * " + *$3); delete $1; delete $3;
-      Tree * temp =new Tree("TIMES", "", $1, $3);;
+      // Tree * temp =new Tree("TIMES", "", $1, $3);
+      Tree * temp =new Tree("TIMES", "");
+      temp->child.push_back($1);
+      temp->child.push_back($3);
       $$ = temp;
      }
   | expression DIVIDEDBY expression {
       //$$ = new std::string(*$1 + " / " + *$3); delete $1; delete $3;
-      Tree * temp =new Tree("DIVIDEDBY", "", $1, $3);;
+      // Tree * temp =new Tree("DIVIDEDBY", "", $1, $3);;
+      Tree * temp =new Tree("DIVIDEDBY", "");
+      temp->child.push_back($1);
+      temp->child.push_back($3);
       $$ = temp;
      }
   | expression EQ expression {
       //$$ = new std::string(*$1 + " == " + *$3); delete $1; delete $3;
-      Tree * temp =new Tree("EQ", "", $1, $3);;
+      // Tree * temp =new Tree("EQ", "", $1, $3);;
+      Tree * temp =new Tree("EQ", "");
+      temp->child.push_back($1);
+      temp->child.push_back($3);      
       $$ = temp;
      }
   | expression NEQ expression {
       //$$ = new std::string(*$1 + " != " + *$3); delete $1; delete $3;
-      Tree * temp =new Tree("NEQ", "", $1, $3);;
+      // Tree * temp =new Tree("NEQ", "", $1, $3);;
+      Tree * temp =new Tree("NEQ", "");
+      temp->child.push_back($1);
+      temp->child.push_back($3);      
       $$ = temp;
      }
   | expression GT expression {
       //$$ = new std::string(*$1 + " > " + *$3); delete $1; delete $3;
-      Tree * temp =new Tree("GT", "", $1, $3);;
+      Tree * temp =new Tree("GT", "");
+      temp->child.push_back($1);
+      temp->child.push_back($3);
       $$ = temp;
      }
   | expression GTE expression {
       //$$ = new std::string(*$1 + " >= " + *$3); delete $1; delete $3;
-      Tree * temp =new Tree("GTE", "", $1, $3);;
+      // Tree * temp =new Tree("GTE", "", $1, $3);;
+      Tree * temp =new Tree("GTE", "");
+      temp->child.push_back($1);
+      temp->child.push_back($3);      
       $$ = temp;
      }
   | expression LT expression {
       //$$ = new std::string(*$1 + " < " + *$3); delete $1; delete $3;
-      Tree * temp =new Tree("LT", "", $1, $3);;
+      // Tree * temp =new Tree("LT", "", $1, $3);;
+      Tree * temp =new Tree("LT", "");
+      temp->child.push_back($1);
+      temp->child.push_back($3);      
       $$ = temp;
      }
   | expression LTE expression {
       //$$ = new std::string(*$1 + " <= " + *$3); delete $1; delete $3;
-      Tree * temp =new Tree("LTE", "", $1, $3);;
+      // Tree * temp =new Tree("LTE", "", $1, $3);;
+      Tree * temp =new Tree("LTE", "");
+      temp->child.push_back($1);
+      temp->child.push_back($3);      
       $$ = temp;
      }
   ;
@@ -234,8 +257,11 @@ assign_statement
   : IDENTIFIER ASSIGN expression NEWLINE {
       //symbols.insert(*$1); $$ = new std::string(*$1 + " = " + *$3 + ";\n");
       //delete $1; delete $3;
-      Tree * id =new Tree("IDENTIFIER", *$1, NULL, NULL);
-      Tree * temp =new Tree("AssignmentStatement", "", id, $3);
+      Tree * id =new Tree("IDENTIFIER", *$1);
+      // Tree * temp =new Tree("AssignmentStatement", "", id, $3);
+      Tree * temp =new Tree("AssignmentStatement", "");
+      temp->child.push_back(id);
+      temp->child.push_back($3);
       // Tree * temp =new Tree("AssignmentStatement", *$1, $3, NULL);
       $$ = temp;
     }
@@ -249,7 +275,8 @@ assign_statement
 block
   : INDENT statements DEDENT {
       //$$ = new std::string("{\n" + *$2 + "}"); delete $2;
-      Tree * temp =new Tree("BLOCK", "", $2, NULL);
+      Tree * temp =new Tree("block", "");
+      temp->child.push_back($2);
       $$ = temp;
      }
   ;
@@ -263,12 +290,16 @@ condition
   : expression { $$ = $1; }
   | condition AND condition {
       //$$ = new std::string(*$1 + " && " + *$3); delete $1; delete $3;
-      Tree * temp =new Tree("AND", "AND", $1, $3);
+      Tree * temp =new Tree("AND", "AND");
+      temp->child.push_back($1);
+      temp->child.push_back($3);
       $$ = temp;
     }
   | condition OR condition {
       //$$ = new std::string(*$1 + " || " + *$3); delete $1; delete $3;
-      Tree * temp =new Tree("OR", "OR", $1, $3);
+      Tree * temp =new Tree("OR", "OR");
+      temp->child.push_back($1);
+      temp->child.push_back($3);
       $$ = temp;
     }
   ;
@@ -282,7 +313,9 @@ condition
 if_statement
   : IF condition COLON NEWLINE block elif_blocks else_block {
       //$$ = new std::string("if (" + *$2 + ") " + *$5 + *$6 + *$7 + "\n"); delete $2; delete $5; delete $6; delete $7;
-      Tree * temp =new Tree("IF_STATEMENT", "", $2, NULL);
+      // Tree * temp =new Tree("IF_STATEMENT", "", $2, NULL);
+      Tree * temp =new Tree("IF_STATEMENT", "");
+      temp->child.push_back($2);
       temp->child.push_back($5);
       temp->child.push_back($6);
       temp->child.push_back($7);
@@ -302,8 +335,10 @@ elif_blocks
     }
   | elif_blocks ELIF condition COLON NEWLINE block {
       //$$ = new std::string(*$1 + " else if (" + *$3 + ") " + *$6); delete $1; delete $3; delete $6;
-      Tree * temp =new Tree("ELIF_BLOCKS", "", $3, NULL);
-      temp->block.push_back($6);
+      Tree * temp =new Tree("ELIF_BLOCKS", "");
+      temp->block.push_back($1);
+      temp->child.push_back($6);
+      temp->child.push_back($3);
       $$ = temp;
     }
   ;
@@ -318,8 +353,8 @@ else_block
     }
   | ELSE COLON NEWLINE block {
       //$$ = new std::string(" else " + *$4); delete $4;
-      Tree * temp =new Tree("ELSE", "", NULL, NULL);
-      temp->block.push_back($4);
+      Tree * temp =new Tree("ELSE", "");
+      temp->child.push_back($4);
       $$ = temp;
     }
 
@@ -331,8 +366,9 @@ else_block
 while_statement
   : WHILE condition COLON NEWLINE block {
       //$$ = new std::string("while (" + *$2 + ") " + *$5 + "\n"); delete $2; delete $5;
-      Tree * temp =new Tree("ELSE", "", $2, NULL);
-      temp->block.push_back($5);
+      Tree * temp =new Tree("ELSE", "");
+      temp->child.push_back($5);
+      temp->child.push_back($2);
       $$ = temp;
     }
   ;
@@ -344,7 +380,7 @@ while_statement
 break_statement
   : BREAK NEWLINE {
       //$$ = new std::string("break;\n");
-      Tree * temp =new Tree("BREAK", "", NULL, NULL);
+      Tree * temp =new Tree("BREAK", "");
       $$ = temp;
       }
   ;
