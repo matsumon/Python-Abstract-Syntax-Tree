@@ -32,16 +32,8 @@ void print_tree(Tree *node,std::string parent){
     current_node = node->node_type + stm.str();
     a++;
     if(node->node_type != "STATEMENT"){
-      print_node(current_node, node->node_type);
+      print_node(current_node, node->node_type + (node->value.size() > 0 ? (" " + node->value) : ""));
       print_connection(current_node,parent);
-    }
-    if(node->value.size() > 0 && node->node_type != "STATEMENT"){
-        std::ostringstream stm ;
-        stm << a;
-        std::string node_value = "var" + stm.str();
-        a++;
-      print_node(node_value, node->value);
-      print_connection(node_value,current_node);
     }
     for (std::vector<Tree *>::iterator it = node->block.begin() ; it != node->block.end(); it++){
       print_tree(*it,parent);
