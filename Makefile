@@ -20,5 +20,5 @@ new:
 	./parse < testing_code/p0.py >test.gv
 	dot -Tpng -otree.png test.gv
 run:
-	./parse < testing_code/p2.py >test.gv
+	./parse < testing_code/p4.py >test.gv
 	dot -Tpng -otree.png test.gv
